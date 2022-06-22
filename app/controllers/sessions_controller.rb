@@ -10,14 +10,13 @@ class SessionsController < ApplicationController
   def create
     reset_session
     @user = User.find_by(email: session_params[:email])
-
     if @user && @user.authenticate(session_params[:password])
       log_in(@user)
-      flash[:notice] = "Welcome Back #{current_user.email}"
+      flash[:notice] = "Welcome Back #{current_user.name}"
       redirect_to root_path
     else
-      flash[:alert] = @user.errors.full_messages.join(', ')
-      redirect_to log_in
+      flash[:alert] = 'Invalid email/password combination'
+      redirect_to '/login'
     end
   end
 
